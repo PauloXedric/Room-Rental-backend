@@ -1,0 +1,6 @@
+@RRMS_HostAddress = http://localhost:5080
+
+GET {{RRMS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

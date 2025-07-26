@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using RRMS.Entities;
+using RRMS.Models.EmergencyContactModels;
+using RRMS.Models.RoomModels;
+
+namespace RRMS.AutoMapper
+{
+    public class MappingProfile : Profile
+    {
+
+        public MappingProfile() 
+        {
+            //EmergencyContact
+            CreateMap<EmergencyContactEntity, ReadEmergencyContactModel>();
+            CreateMap<CreateEmergencyContactModel, EmergencyContactEntity>();
+            CreateMap<PatchEmergencyContactModel, EmergencyContactEntity>()
+              .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<CreateRoomModel, RoomEntity>();
+
+
+            //Room
+            CreateMap<RoomEntity, ReadRoomModel>();
+            CreateMap<PatchRoomInfoModel, RoomEntity>()
+             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<PatchRoomInfoModel, RoomEntity>()
+             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<PatchRoomAvailabilityModel, RoomEntity>()
+            .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+
+        }
+
+
+    }
+}
