@@ -15,6 +15,7 @@ namespace RRMS.Services
         Task<Result> AddRoomAsync(CreateRoomModel addRoom);
         Task<Result> UpdateRoomInformationAsync(PatchRoomInfoModel roomInfo);
         Task<Result> UpdateRoomPricingAsync(PatchRoomPricingModel roomPrice);
+        Task<bool> UpdateRoomAvailability(PatchRoomAvailabilityModel roomAvail);
         Task<Result> DeleteRoomAsync(int roomId);
     }
 

@@ -21,7 +21,7 @@ namespace RRMS.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<ReadEmergencyContactModel>> GetUserEmergencyInfo()
+        public async Task<ActionResult<ReadEmergencyContactModel>> GetUserEmergencyInfoByUser()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

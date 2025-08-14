@@ -75,6 +75,17 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<MappingProfile>();
@@ -127,6 +138,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAngularApp");
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

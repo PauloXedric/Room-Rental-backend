@@ -21,7 +21,7 @@ namespace RRMS.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<ReadRoomModel>>> GetRoomDetails([FromQuery]PaginationParams pagination, [FromQuery] string? filter)
+        public async Task<ActionResult<PagedResult<ReadRoomModel>>> GetAllRoomDetails([FromQuery]PaginationParams pagination, [FromQuery] string? filter)
         {         
             var requestResult = await _roomService.GetRoomDetailsAsync(pagination, filter);
             return Ok(requestResult);
@@ -30,7 +30,7 @@ namespace RRMS.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddNewRom([FromBody] CreateRoomModel addRoom)
+        public async Task<IActionResult> AddNewRoom([FromBody] CreateRoomModel addRoom)
         {
             if (!ModelState.IsValid)
             {
@@ -87,6 +87,22 @@ namespace RRMS.Controllers
                 _ => StatusCode(500, ApiResponse.FailMessage("Unexpected result."))
             };
         }
+
+
+        [HttpPatch("update-availability")]
+        public async Task<IActionResult> UpdateRoomAvailability([FromBody] PatchRoomAvailabilityModel roomAvail)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _roomService.UpdateRoomAvailability(roomAvail);
+
+            return result
+                ? Ok(ApiResponse.SuccessMessage("Room availability updated successfully."))
+                : NotFound(ApiResponse.FailMessage("Room not found."));
+        }
+
 
 
         [HttpDelete("{roomId}")]
