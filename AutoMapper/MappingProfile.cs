@@ -23,7 +23,7 @@ namespace RRMS.AutoMapper
             CreateMap<RoomEntity, ReadRoomModel>();
             CreateMap<PatchRoomInfoModel, RoomEntity>()
              .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
-            CreateMap<PatchRoomInfoModel, RoomEntity>()
+            CreateMap<PatchRoomPricingModel, RoomEntity>()
              .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<PatchRoomAvailabilityModel, RoomEntity>()
             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
