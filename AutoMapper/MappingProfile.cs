@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using RRMS.Entities;
 using RRMS.Models.EmergencyContactModels;
+using RRMS.Models.Identity;
 using RRMS.Models.RoomModels;
+using RRMS.Models.UserAccountModels;
 
 namespace RRMS.AutoMapper
 {
@@ -28,6 +30,10 @@ namespace RRMS.AutoMapper
             CreateMap<PatchRoomAvailabilityModel, RoomEntity>()
             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
+
+            //UserAccount
+            CreateMap<RegisterUserModel, ApplicationUser>()
+              .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));     
         }
 
 
