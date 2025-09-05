@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RRMS.Entities;
+using RRMS.Models.ChatMessageModels;
 using RRMS.Models.EmergencyContactModels;
 using RRMS.Models.Identity;
 using RRMS.Models.RoomModels;
@@ -12,12 +13,16 @@ namespace RRMS.AutoMapper
 
         public MappingProfile() 
         {
+            //ChatMessage
+            CreateMap<ChatMessageEntity, ReadMessageModel>();
+            CreateMap<AddMessageModel, ChatMessageEntity>();
+
+
             //EmergencyContact
             CreateMap<EmergencyContactEntity, ReadEmergencyContactModel>();
             CreateMap<CreateEmergencyContactModel, EmergencyContactEntity>();
             CreateMap<PatchEmergencyContactModel, EmergencyContactEntity>()
               .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
-
             CreateMap<CreateRoomModel, RoomEntity>();
 
 
@@ -33,6 +38,8 @@ namespace RRMS.AutoMapper
 
             //UserAccount
             CreateMap<RegisterUserModel, ApplicationUser>()
+              .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
+              .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
               .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));     
         }
 

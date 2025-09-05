@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RRMS.Entities;
 using RRMS.Models.Identity;
+using RRMS.Views;
 
 namespace RRMS.Data
 {
@@ -10,7 +11,11 @@ namespace RRMS.Data
 
         public DbSet<EmergencyContactEntity> EmergencyContacts { get; set; }
         public DbSet<RoomEntity> Room { get; set; }
+        public DbSet<ChatMessageEntity> ChatMessages { get; set; }
 
+
+
+        public DbSet<UserEmergencyContactView> UserEmergencyContact { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -33,6 +38,12 @@ namespace RRMS.Data
             modelBuilder.Entity<RoomEntity>()
                .Property(au => au.GenderRestriction)
                .HasConversion<string>();
+
+
+
+             modelBuilder.Entity<UserEmergencyContactView>()
+               .HasNoKey()
+               .ToView("UserEmergencyContact");
         }
 
     }
