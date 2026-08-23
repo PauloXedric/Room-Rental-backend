@@ -21,9 +21,9 @@ namespace RRMS.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<ReadRoomModel>>> GetAllRoomDetails([FromQuery]PaginationParams pagination, [FromQuery] string? filter)
+        public async Task<ActionResult<PagedResult<ReadRoomModel>>> GetAllRoomDetails([FromQuery]PaginationParams pagination, [FromQuery] string? roomNameFilter)
         {         
-            var requestResult = await _roomService.GetRoomDetailsAsync(pagination, filter);
+            var requestResult = await _roomService.GetRoomDetailsAsync(pagination, roomNameFilter);
             return Ok(requestResult);
         }
 

@@ -15,5 +15,6 @@ namespace RRMS.Helpers
         {
             entity.ModifiedOn = LocalTimeHelper.GetPhilippineTimeNow();
         }
+
     }
 }

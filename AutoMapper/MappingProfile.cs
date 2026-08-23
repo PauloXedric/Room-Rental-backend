@@ -37,10 +37,11 @@ namespace RRMS.AutoMapper
 
 
             //UserAccount
+            CreateMap<ApplicationUser, ReadUserIdModel>();
             CreateMap<RegisterUserModel, ApplicationUser>()
               .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
               .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-              .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));     
+              .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
 
 

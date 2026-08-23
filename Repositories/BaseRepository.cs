@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RRMS.Abstractions;
 using RRMS.Data;
 
 namespace RRMS.Repositories

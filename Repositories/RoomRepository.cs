@@ -5,7 +5,8 @@ namespace RRMS.Repositories
 {
     public interface IRoomRepository : IBaseRepository<RoomEntity>
     {
-        IQueryable<RoomEntity> GetAllRoomByName(string? filter);
+        IQueryable<RoomEntity> GetRoomsByName(string? roomNameFilter);
+
     }
 
 
@@ -20,13 +21,13 @@ namespace RRMS.Repositories
         }
 
 
-        public IQueryable<RoomEntity> GetAllRoomByName(string? filter)
+        public IQueryable<RoomEntity> GetRoomsByName(string? roomNameFilter)
         {
             var query = _dbContext.Room.AsQueryable();
 
-            if (!string.IsNullOrEmpty(filter))
+            if (!string.IsNullOrEmpty(roomNameFilter))
             {
-                query = query.Where(r => r.RoomName.Contains(filter));
+                query = query.Where(r => r.RoomName.Contains(roomNameFilter));
             }
 
             return query.OrderBy(r => r.RoomName);

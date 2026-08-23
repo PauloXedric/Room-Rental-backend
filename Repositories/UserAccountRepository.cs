@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RRMS.Data;
 using RRMS.Enums;
 using RRMS.Helpers;
@@ -9,9 +11,12 @@ namespace RRMS.Repositories
 {
     public interface IUserAccountRepository 
     {
+        Task<List<ReadAccountStatusModel>> GetAllAccountStatusAsync(string? firstNameFilter);
+        Task<List<ReadUserIdModel>> GetAllTenantsIdAsync();
         Task<bool> CheckExistsAsync(string username);
         Task<bool> AddUserAsync(RegisterUserModel userRegister);
         Task<ApplicationUser?> GetUserLoginAsync(LoginUserModel userLogin);
+        Task<bool> UpdateUserStatusAsync(UpdateUserStatusModel updateStatus);
 
     }
 
@@ -19,12 +24,51 @@ namespace RRMS.Repositories
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _userRole;
+        private readonly IMapper _mapper;
 
-        public UserAccountRepository(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> userRole)
+        public UserAccountRepository(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> userRole, IMapper mapper)
         {
             _userManager = userManager;
             _userRole = userRole;
+            _mapper = mapper;
         }
+
+       
+
+        public async Task<List<ReadAccountStatusModel>> GetAllAccountStatusAsync(string? firstNameFilter)
+        {
+            var users = _userManager.Users.ToList();
+
+            if (!string.IsNullOrEmpty(firstNameFilter))
+            {
+                users = users
+                    .Where(u => u.FirstName.Contains(firstNameFilter, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            var result = new List<ReadAccountStatusModel>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains(RoleEnum.Admin.ToString()))
+                    continue;
+
+                result.Add(ReadAccountStatusModel.UserStatus(user));
+            }
+
+            return result;
+        }
+
+
+        public async Task<List<ReadUserIdModel>> GetAllTenantsIdAsync()
+        {
+            var tenantUsers = await _userManager.GetUsersInRoleAsync(RoleEnum.Tenant.ToString());
+
+            return _mapper.Map<List<ReadUserIdModel>>(tenantUsers);
+        }
+
 
         public async Task<bool> CheckExistsAsync(string username)
         {
@@ -35,16 +79,8 @@ namespace RRMS.Repositories
 
         public async Task<bool> AddUserAsync(RegisterUserModel userRegister)
         {
-            var identityUser = new ApplicationUser
-            {
-                UserName = userRegister.Email,
-                Email = userRegister.Email,
-                FirstName = userRegister.FirstName,
-                LastName = userRegister.LastName,
-                Age = userRegister.Age,
-                Gender = userRegister.Gender,
-                Occupation = userRegister.Occupation,           
-            };
+
+            var identityUser = _mapper.Map<ApplicationUser>(userRegister);        
 
             AuditHelper.SetCreatedAndModifiedOn(identityUser);          
 
@@ -87,7 +123,22 @@ namespace RRMS.Repositories
         }
 
 
-     //   public async Task<>
+        public async Task<bool> UpdateUserStatusAsync(UpdateUserStatusModel updateStatus)
+        {
+            var user = await _userManager.FindByIdAsync(updateStatus.UserId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.Status = updateStatus.Status;
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded;
+        }
+
+
+       
 
 
     }

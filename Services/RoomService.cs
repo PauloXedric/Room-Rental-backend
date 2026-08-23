@@ -11,7 +11,7 @@ namespace RRMS.Services
 {
     public interface IRoomService 
     {
-        Task<PagedResult<ReadRoomModel>> GetRoomDetailsAsync(PaginationParams pagination, string? filter);
+        Task<PagedResult<ReadRoomModel>> GetRoomDetailsAsync(PaginationParams pagination, string? roomNameFilter);
         Task<Result> AddRoomAsync(CreateRoomModel addRoom);
         Task<Result> UpdateRoomInformationAsync(PatchRoomInfoModel roomInfo);
         Task<Result> UpdateRoomPricingAsync(PatchRoomPricingModel roomPrice);
@@ -34,11 +34,11 @@ namespace RRMS.Services
         }
 
 
-        public async Task<PagedResult<ReadRoomModel>> GetRoomDetailsAsync(PaginationParams pagination, string? filter)
+        public async Task<PagedResult<ReadRoomModel>> GetRoomDetailsAsync(PaginationParams pagination, string? roomNameFilter)
         {
             try
             {
-                var query = _roomRepository.GetAllRoomByName(filter);
+                var query = _roomRepository.GetRoomsByName(roomNameFilter);
 
                 var totalCount = await query.CountAsync();
 

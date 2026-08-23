@@ -4,6 +4,7 @@
     {
         Active, 
         Inactive,
-        Suspended
+        Suspended,
+        None
     }
 }
